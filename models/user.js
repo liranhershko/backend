@@ -31,6 +31,16 @@ userSchema.pre("save", function(next) {
   });
 });
 
+// defining a method that will be available on every user record
+userSchema.methods.comparePassword = function(candidatePassword, callback) {
+  bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, isMatch);
+  });
+};
+
 const ModelClass = mongoose.model("user", userSchema);
 
 module.exports = ModelClass;
